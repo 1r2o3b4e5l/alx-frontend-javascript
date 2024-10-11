@@ -1,25 +1,20 @@
-/* eslint-disable linebreak-style */
-/* eslint-disable no-unused-vars */
-const cleanSet = (aSet, startString) => {
-  const arr = Array.from(aSet);
-  const newArr = [];
-
-  if (startString.length === 0) {
+export default function cleanSet(set, startString) {
+  if (
+    !set && !startString && !(set instanceof Set) && typeof startString !== 'string'
+  ) {
     return '';
   }
 
-  for (const i of arr) {
-    const str = i.slice(0, startString.length);
+  const parts = [];
 
-    if (str === startString) {
-      newArr.push(i);
+  for (const value of set.values()) {
+    if (typeof value === 'string' && value.startsWith(startString)) {
+      const valueSubStr = value.substring(startString.length);
+
+      if (valueSubStr && valueSubStr !== value) {
+        parts.push(valueSubStr);
+      }
     }
   }
-
-  return newArr.toString().split(',').join('-').split(startString)
-    .toString()
-    .split(',')
-    .join('');
-};
-
-export default cleanSet;
+  return parts.join('-');
+}
